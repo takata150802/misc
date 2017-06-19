@@ -1,11 +1,12 @@
 `define IS_REQ_ID_ENB(selk) (selk[7] & (|(dec_4to16(selk[4:1]) & p_req_id_enb)))
 `define IS_THIS_SEL_HIT(selk) ((p_arb_ch == selk[6:5]) & `IS_REQ_ID_ENB(selk))
+`define SEL_CH_MASKED(selk) ({4{`IS_REQ_ID_ENB(selk)}} & dec_2to4(selk[6:5]))
 `define HOLD       2'b00
 `define WRITE_ONLY 2'b01
 `define READ_ONLY  2'b10
 `define READ_WRITE 2'b11
 
-module expection(
+module expectation(
     input wire clk,
     input wire rst,
     input wire p_req_val,
@@ -16,7 +17,7 @@ module expection(
     input wire [16-1:0] p_req_id_enb,
     output wire p_sel_val,
     output wire [4-1:0] p_sel_req_id,
-    output wire [4-1:0] p_lru_ch,
+    output wire [4-1:0] p_lru_join_ch,
     output wire p_pe
     );
     
@@ -30,47 +31,42 @@ module expection(
     wire p_sel_val_stb;
     assign p_sel_val = p_arb_val & p_sel_val_stb;
     wire [4-1:0] idx_sel_hit;
-    assign {p_sel_val_stb, p_sel_req_idi, idx_sel_hit} =
-        IS_THIS_SEL_HIT(sel0) ? {1'b1, sel0[4:1], 4'h0}:
-        IS_THIS_SEL_HIT(sel1) ? {1'b1, sel1[4:1], 4'h1}:
-        IS_THIS_SEL_HIT(sel2) ? {1'b1, sel2[4:1], 4'h2}:
-        IS_THIS_SEL_HIT(sel3) ? {1'b1, sel3[4:1], 4'h3}:
-        IS_THIS_SEL_HIT(sel4) ? {1'b1, sel4[4:1], 4'h4}:
-        IS_THIS_SEL_HIT(sel5) ? {1'b1, sel5[4:1], 4'h5}:
-        IS_THIS_SEL_HIT(sel6) ? {1'b1, sel6[4:1], 4'h6}:
-        IS_THIS_SEL_HIT(sel7) ? {1'b1, sel7[4:1], 4'h7}:
-        IS_THIS_SEL_HIT(sel8) ? {1'b1, sel8[4:1], 4'h8}:
-        IS_THIS_SEL_HIT(sel9) ? {1'b1, sel9[4:1], 4'h9}:
-        IS_THIS_SEL_HIT(sela) ? {1'b1, sela[4:1], 4'ha}:
-        IS_THIS_SEL_HIT(selb) ? {1'b1, selb[4:1], 4'hb}:
-        IS_THIS_SEL_HIT(selc) ? {1'b1, selc[4:1], 4'hc}:
-        IS_THIS_SEL_HIT(seld) ? {1'b1, seld[4:1], 4'hd}:
-        IS_THIS_SEL_HIT(sele) ? {1'b1, sele[4:1], 4'he}:
-        IS_THIS_SEL_HIT(self) ? {1'b1, self[4:1], 4'hf}:
-            :5'b0_0000;
+    assign {p_sel_val_stb, p_sel_req_id, idx_sel_hit} =
+        `IS_THIS_SEL_HIT(sel0) ? {1'b1, sel0[4:1], 4'h0}:
+        `IS_THIS_SEL_HIT(sel1) ? {1'b1, sel1[4:1], 4'h1}:
+        `IS_THIS_SEL_HIT(sel2) ? {1'b1, sel2[4:1], 4'h2}:
+        `IS_THIS_SEL_HIT(sel3) ? {1'b1, sel3[4:1], 4'h3}:
+        `IS_THIS_SEL_HIT(sel4) ? {1'b1, sel4[4:1], 4'h4}:
+        `IS_THIS_SEL_HIT(sel5) ? {1'b1, sel5[4:1], 4'h5}:
+        `IS_THIS_SEL_HIT(sel6) ? {1'b1, sel6[4:1], 4'h6}:
+        `IS_THIS_SEL_HIT(sel7) ? {1'b1, sel7[4:1], 4'h7}:
+        `IS_THIS_SEL_HIT(sel8) ? {1'b1, sel8[4:1], 4'h8}:
+        `IS_THIS_SEL_HIT(sel9) ? {1'b1, sel9[4:1], 4'h9}:
+        `IS_THIS_SEL_HIT(sela) ? {1'b1, sela[4:1], 4'ha}:
+        `IS_THIS_SEL_HIT(selb) ? {1'b1, selb[4:1], 4'hb}:
+        `IS_THIS_SEL_HIT(selc) ? {1'b1, selc[4:1], 4'hc}:
+        `IS_THIS_SEL_HIT(seld) ? {1'b1, seld[4:1], 4'hd}:
+        `IS_THIS_SEL_HIT(sele) ? {1'b1, sele[4:1], 4'he}:
+        `IS_THIS_SEL_HIT(self) ? {1'b1, self[4:1], 4'hf}:5'b0_0000;
 
-    assign p_lru_ch = sel0[6:5] | 
-
-    function [4-1:0] sel_ch_dec_masked(
-        input [8-1:0] selk,
-    );
-    begin
-        function [16-1:0] dec_2to4 (
-            input [4-1:0] dec_in
-            );
-            begin
-            case (dec_in)
-                2'b00:  dec_2to4 = 4'b0001;
-                2'b01:  dec_2to4 = 4'b0010;
-                2'b10:  dec_2to4 = 4'b0100;
-                2'b11:  dec_2to4 = 4'b1000;
-                default:dec_2to4 = 4'bxxxx;
-            endcase
-            end
-        endfunction
-        assign sel_ch_dec_masked = (IS_REQ_ID_ENB(selk)? <-この書き方はできない考えなおし
-    end
+    assign p_lru_join_ch = `SEL_CH_MASKED(sel0) | `SEL_CH_MASKED(sel1) | `SEL_CH_MASKED(sel2) | `SEL_CH_MASKED(sel3) | 
+                           `SEL_CH_MASKED(sel4) | `SEL_CH_MASKED(sel5) | `SEL_CH_MASKED(sel6) | `SEL_CH_MASKED(sel7) | 
+                           `SEL_CH_MASKED(sel8) | `SEL_CH_MASKED(sel9) | `SEL_CH_MASKED(sela) | `SEL_CH_MASKED(selb) | 
+                           `SEL_CH_MASKED(selc) | `SEL_CH_MASKED(seld) | `SEL_CH_MASKED(sele) | `SEL_CH_MASKED(self);
+    function [16-1:0] dec_2to4 (
+        input [4-1:0] dec_in
+        );
+        begin
+        case (dec_in)
+            2'b00:  dec_2to4 = 4'b0001;
+            2'b01:  dec_2to4 = 4'b0010;
+            2'b10:  dec_2to4 = 4'b0100;
+            2'b11:  dec_2to4 = 4'b1000;
+            default:dec_2to4 = 4'bxxxx;
+        endcase
+        end
     endfunction
+    
     // parity check
     assign p_pe = | {^sel0, ^sel1, ^sel2, ^sel3, ^sel4, ^sel5, ^sel6, ^sel7, ^sel8, ^sel9, ^sela, ^selb, ^selc, ^seld, ^sele, ^self};
     
@@ -108,7 +104,7 @@ module expection(
             rfile[15] <= (4'hf >= idx_sel_hit)?8'h00    :rfile[15];
         end else begin // if (ctrl_ob==`READ_WRITE) begin
             w_ptr <= w_ptr;
-            rfile[0] <= (5'h0_0001 == w_ptr)?din: (4'h0 >= idx_sel_hit)?rfile[1]:rfile[0];
+            rfile[0] <= (5'b0_0001 == w_ptr)?din: (4'h0 >= idx_sel_hit)?rfile[1]:rfile[0];
             rfile[1] <= (5'b0_0010 == w_ptr)?din: (4'h1 >= idx_sel_hit)?rfile[2]:rfile[1];
             rfile[2] <= (5'b0_0011 == w_ptr)?din: (4'h2 >= idx_sel_hit)?rfile[3]:rfile[2];
             rfile[3] <= (5'b0_0100 == w_ptr)?din: (4'h3 >= idx_sel_hit)?rfile[4]:rfile[3];
