@@ -5,7 +5,7 @@ pwd
 echo "apt-get update？ [Y/n]"
 read ANSWER
 case $ANSWER in
-    "" | "Y" | "y" | "yes" | "Yes" | "YES" )sudo apt-get update&&sudo apt-get upgrade;;
+    "" | "Y" | "y" | "yes" | "Yes" | "YES" )sudo apt-get -y update&&sudo apt-get -y upgrade;;
     * ) echo "OK! Continue without apt-get update" ;;
 esac
 sudo apt-get install -y git vim nautilus-open-terminal openssh-server conky-all python tmux
@@ -34,13 +34,17 @@ case $ANSWER in
         echo '$ git config --global user.name "Your Name". enter use.name:' && \
         read ANSWER && \
         git config --global user.name $ANSWER ;;
-    * ) echo "OK! Continue without apt-get update" ;;
+    * ) echo "OK! Continue without global git config" ;;
 esac
 
-exit
+sudo apt-get install -y chromium-browser
+sudo add-apt-repository -y ppa:webupd8team/atom
+sudo apt-get -y update
+sudo apt-get install -y atom
 
-git clone git://github.com/yyuu/pyenv.git ~/.pyenv
-git clone git://github.com/yyuu/pyenv.git ~/.pyenv
+if [ ! -e ~/.pyenv ]; then
+    git clone git://github.com/yyuu/pyenv.git ~/.pyenv
+fi
 echo 'export PYENV_ROOT=$HOME/.pyenv' >> ~/.bashrc
 echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
@@ -60,7 +64,7 @@ pip install --user scipy
 pip install --user ipython
 pip install --user scikit-image
 pip install --user matplotlib
-pip install --user scikit-learn pandas h5py pylab
+pip install --user scikit-learn pandas h5py
 pip install --user chainer 
 pip install --user spyder
 echo 'Sus!'
