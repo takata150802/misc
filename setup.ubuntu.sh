@@ -15,7 +15,7 @@ sudo /etc/init.d/ssh restart
 #
 env LANGUAGE=C LC_MESSAGES=C xdg-user-dirs-gtk-update
 
-if [ ! -n ~/dotfiles ]; then
+if [ ! -e ~/dotfiles ]; then
     git clone https://github.com/takata150802/dotfiles.git ~/dotfiles
 fi
 chmod +x ~/dotfiles/create_link.sh
