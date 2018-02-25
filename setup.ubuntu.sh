@@ -1,5 +1,5 @@
 #!/bin/bash
-set -o errexit
+set -Ceu
 pwd
 
 echo "apt-get update？ [Y/n]"
@@ -8,18 +8,36 @@ case $ANSWER in
     "" | "Y" | "y" | "yes" | "Yes" | "YES" )sudo apt-get update&&sudo apt-get upgrade;;
     * ) echo "OK! Continue without apt-get update" ;;
 esac
-sudo apt-get install git vim nautilus-open-terminal openssh-server conky-all python tmux
-sudo apt-get install python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose
+sudo apt-get install -y git vim nautilus-open-terminal openssh-server conky-all python tmux
 sudo vim /etc/ssh/sshd_config
 sudo /etc/init.d/ssh restart
 #PermitRootLogin no
 #
 env LANGUAGE=C LC_MESSAGES=C xdg-user-dirs-gtk-update
 
-git clone https://github.com/takata150802/dotfiles.git ~/dotfiles
+if [ ! -n ~/dotfiles ]; then
+    git clone https://github.com/takata150802/dotfiles.git ~/dotfiles
+fi
 chmod +x ~/dotfiles/create_link.sh
 ~/dotfiles/create_link.sh
-killall conky; conky 1>/dev/null 2>&1 &
+killall conky && true
+conky 1>/dev/null 2>&1 &
+
+
+echo "Do you edit your global git config? [Y/n]"
+read ANSWER
+case $ANSWER in
+    "" | "Y" | "y" | "yes" | "Yes" | "YES" ) \
+        echo '$ git config --global user.email "you@example.com". enter use.email:' && \
+        read ANSWER && \
+        git config --global user.email $ANSWER && \
+        echo '$ git config --global user.name "Your Name". enter use.name:' && \
+        read ANSWER && \
+        git config --global user.name $ANSWER ;;
+    * ) echo "OK! Continue without apt-get update" ;;
+esac
+
+exit
 
 git clone git://github.com/yyuu/pyenv.git ~/.pyenv
 git clone git://github.com/yyuu/pyenv.git ~/.pyenv
