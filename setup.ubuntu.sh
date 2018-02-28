@@ -15,7 +15,7 @@ sudo /etc/init.d/ssh restart
 #
 env LANGUAGE=C LC_MESSAGES=C xdg-user-dirs-gtk-update
 
-if [ ! -n ~/dotfiles ]; then
+if [ ! -e ~/dotfiles ]; then
     git clone https://github.com/takata150802/dotfiles.git ~/dotfiles
 fi
 chmod +x ~/dotfiles/create_link.sh
@@ -37,14 +37,18 @@ case $ANSWER in
     * ) echo "OK! Continue without apt-get update" ;;
 esac
 
-exit
+if [ ! -e ~/.pyenv ]; then
+    git clone https://github.com/yyuu/pyenv.git ~/.pyenv
+fi
 
-git clone git://github.com/yyuu/pyenv.git ~/.pyenv
-git clone git://github.com/yyuu/pyenv.git ~/.pyenv
 echo 'export PYENV_ROOT=$HOME/.pyenv' >> ~/.bashrc
 echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 source ~/.bashrc
+echo  $PATH
+. ~/.bashrc
+echo  $PATH
+exit
 sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev
 sudo apt-get install -y libfreetype6-dev libblas-dev liblapack-dev gfortran tk-dev libhdf5-dev python-dev
