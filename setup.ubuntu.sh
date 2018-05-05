@@ -43,12 +43,17 @@ sudo apt-get -y update
 sudo apt-get install -y atom
 
 if [ ! -e ~/.pyenv ]; then
-    git clone git://github.com/yyuu/pyenv.git ~/.pyenv
+    git clone https://github.com/yyuu/pyenv.git ~/.pyenv
 fi
+
 echo 'export PYENV_ROOT=$HOME/.pyenv' >> ~/.bashrc
 echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 source ~/.bashrc
+echo  $PATH
+. ~/.bashrc
+echo  $PATH
+exit
 sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev
 sudo apt-get install -y libfreetype6-dev libblas-dev liblapack-dev gfortran tk-dev libhdf5-dev python-dev
