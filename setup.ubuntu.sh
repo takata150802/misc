@@ -1,16 +1,17 @@
 #!/bin/bash
-set -Ceu
+set -Ceux
 pwd
 
-echo "apt-get update？ [Y/n]"
+: 'flush stderr' ; stdbuf --error=0 printf '' >&2
+echo "apt update？ [Y/n]"
 read ANSWER
 case $ANSWER in
-    "" | "Y" | "y" | "yes" | "Yes" | "YES" )sudo apt-get -y update&&sudo apt-get -y upgrade;;
-    * ) echo "OK! Continue without apt-get update" ;;
+    "" | "Y" | "y" | "yes" | "Yes" | "YES" )sudo apt -y update&&sudo apt -y upgrade;;
+    * ) echo "OK! Continue without apt update" ;;
 esac
-sudo apt-get install -y git vim nautilus-open-terminal openssh-server conky-all python tmux
+sudo apt install -y git vim openssh-server conky-all python tmux
 sudo vim /etc/ssh/sshd_config
-sudo /etc/init.d/ssh restart
+sudo systemctl start ssh 
 #PermitRootLogin no
 #
 env LANGUAGE=C LC_MESSAGES=C xdg-user-dirs-gtk-update
@@ -20,10 +21,8 @@ if [ ! -e ~/dotfiles ]; then
 fi
 chmod +x ~/dotfiles/create_link.sh
 ~/dotfiles/create_link.sh
-killall conky && true
-conky 1>/dev/null 2>&1 &
 
-
+: 'flush stderr' ; stdbuf --error=0 printf '' >&2
 echo "Do you edit your global git config? [Y/n]"
 read ANSWER
 case $ANSWER in
@@ -37,10 +36,13 @@ case $ANSWER in
     * ) echo "OK! Continue without global git config" ;;
 esac
 
-sudo apt-get install -y chromium-browser
-sudo add-apt-repository -y ppa:webupd8team/atom
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo apt install -y ./google-chrome-stable_current_amd64.deb
+
+wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+sudo add-apt-repository 'deb https://typora.io/linux ./'
 sudo apt-get -y update
-sudo apt-get install -y atom
+sudo apt-get install -y typora
 
 if [ ! -e ~/.pyenv ]; then
     git clone https://github.com/yyuu/pyenv.git ~/.pyenv
@@ -49,18 +51,16 @@ fi
 echo 'export PYENV_ROOT=$HOME/.pyenv' >> ~/.bashrc
 echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
-source ~/.bashrc
-wait
-echo  $PATH
+export PYENV_ROOT=$HOME/.pyenv
+export PATH=$PYENV_ROOT/bin:$PATH
+eval "$(pyenv init -)"
 
-sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev
-sudo apt-get install -y libfreetype6-dev libblas-dev liblapack-dev gfortran tk-dev libhdf5-dev python-dev
-pyenv install 2.7.9
+sudo apt install -y libfreetype6-dev libblas-dev liblapack-dev gfortran tk-dev libhdf5-dev python-dev
+# pyenv install 3.9.0
 pyenv rehash
-pyenv global  2.7.9
-#ubuntu 14.0.4の.vhdにはpython 2.7.6が入っているがpipは使えない
-#python get-pip.py --user#2.7.9にはpipがデフォルトで入っている
+pyenv global  3.9.0
 pip install -U pip
 pip install --user -U setuptools
 pip install --user numpy six
@@ -71,4 +71,3 @@ pip install --user matplotlib
 pip install --user scikit-learn pandas h5py
 pip install --user chainer 
 pip install --user spyder
-echo 'Sus!'
