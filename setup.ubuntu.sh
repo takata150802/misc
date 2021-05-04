@@ -58,16 +58,16 @@ eval "$(pyenv init -)"
 sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev
 sudo apt install -y libfreetype6-dev libblas-dev liblapack-dev gfortran tk-dev libhdf5-dev python-dev
-# pyenv install 3.9.0
+pyenv install 3.9.0
 pyenv rehash
 pyenv global  3.9.0
 pip install -U pip
-pip install --user -U setuptools
-pip install --user numpy six
-pip install --user scipy
-pip install --user ipython
-pip install --user scikit-image
-pip install --user matplotlib
-pip install --user scikit-learn pandas h5py
-pip install --user chainer 
-pip install --user spyder
+# pip install --user -U setuptools
+# pip install --user numpy six
+# pip install --user scipy
+# pip install --user ipython
+# pip install --user scikit-image
+# pip install --user matplotlib
+# pip install --user scikit-learn pandas h5py
+# pip install --user chainer 
+# pip install --user spyder
