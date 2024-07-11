@@ -4,11 +4,13 @@
 
 - <a href="https://github.com/takata150802/misc/blob/master/README.md#misc"> misc/README.md#misc </a>
 - <a href="https://github.com/takata150802/misc/blob/master/tmp/a.md#ch0"> misc/tmp/a.md#ch0 </a>
-- <a href="https://github.com/takata150802/misc/blob/master/tmp/a.md#ch0"> misc/tmp/a.md#ch1 </a>
-- <a href="https://github.com/takata150802/misc/blob/master/tmp/a.md#ch0"> misc/tmp/a.md#ch2 </a>
+- <a href="https://github.com/takata150802/misc/blob/master/tmp/a.md#ch1"> misc/tmp/a.md#ch1 </a>
+- <a href="https://github.com/takata150802/misc/blob/master/tmp/a.md#ch2"> misc/tmp/a.md#ch2 </a>
+- <a href="https://github.com/takata150802/misc/blob/master/tmp/a.md#ch3"> misc/tmp/a.md#ch3 </a>
 - <a href="https://github.com/takata150802/misc/blob/master/tmp/b.md#ch0"> misc/tmp/b.md#ch0 </a>
-- <a href="https://github.com/takata150802/misc/blob/master/tmp/b.md#ch0"> misc/tmp/b.md#ch1 </a>
-- <a href="https://github.com/takata150802/misc/blob/master/tmp/b.md#ch0"> misc/tmp/b.md#ch2 </a>
+- <a href="https://github.com/takata150802/misc/blob/master/tmp/b.md#ch1"> misc/tmp/b.md#ch1 </a>
+- <a href="https://github.com/takata150802/misc/blob/master/tmp/b.md#ch2"> misc/tmp/b.md#ch2 </a>
+- <a href="https://github.com/takata150802/misc/blob/master/tmp/b.md#ch3"> misc/tmp/b.md#ch3 </a>
 
 <br>
 <br>
